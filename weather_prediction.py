@@ -199,4 +199,26 @@ def plot_y_test(regr, X_test, y_test, ask_user):
     #     plt.scatter(X_test[:, i], y_test)
     #     plt.plot(X_test[:, i], regr.predict(X_test), color='blue', linewidth=3)
 
+    y_predict = regr.predict(X_test)
+    # print("==> y_test type = {}".format(type(y_test)) )
+    # print("y_test.index = {}".format(y_test.index))
+    # print("y_test = {}".format(y_test) )
+    # print("y_predict = {}".format(y_predict) )
+    df_plot = y_test
+    # print(df_plot)
+    # print("DATE")
+    # print("#########################")
+
+    #df_plot = df_plot.reset_index(level=['DATE'])
+    df_plot = df_plot.reset_index(level= ['DATE'])
+    #df_plot.iloc()
+    df_plot.loc[:, 'predict_temp_C'] = y_predict
+    # shift back to raw DATE time 1day_later
+    df_plot.loc[:, "raw_DATE"] = df_plot['DATE'].apply(lambda time_obj: time_obj + relativedelta(days=1))
+    df_plot.rename(columns={'1days_later_temp_C': 'raw_temp_C', 'DATE': 'label_DATE'}, inplace=True)
+
+    df_plot = df_plot.set_index("raw_DATE")
+    # print(df_plot)
+    # print("#########################")
+
 
