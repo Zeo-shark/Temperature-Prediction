@@ -81,7 +81,7 @@ def dateToMinute(s, option):
     return int(time_diff.total_seconds()/60)
 
 # do interpolate
-def interpoate_df(df, features):
+def interpolate_df(df, features):
     df_re= df
 
     print("len(df.index) = {}".format(len(df.index)))
@@ -123,4 +123,31 @@ def interpoate_df(df, features):
         print("CHECK: There is no null value in df_re.")
 
     return df_re
+
+# generating training and test dataset
+def data_gen(df, targets, features, data_tr_yr_start, data_tr_yr_end, data_test_yr_start, data_test_yr_end):
+    # reset index
+    # df= df.reset_index(drop= True)
+    df= df.set_index("DATE")
+    #prepare training date
+    data_start= datetime(data_tr_yr_start ,1, 1, 1, 0, 0)
+    data_end =   datetime(data_test_yr_end, 12, 31, 23, 59, 59)
+    df_train=  df.loc[(df.index> data_start ) & (df.index <= data_end ), :]
+
+
+    # do interpolate on training set only
+    df_train= interpolate_df(df_train, features)
+    df_train.to_csv('df_train_clean.csv')
+
+    X_train= df_train[features]
+    y_train= df_train[targets]
+
+    #prepare the test data
+    data_start= datetime(data_test_yr_start, 1, 1, 0, 0, 0)
+    data_end=   datetime(data_test_yr_end, 12, 31, 23, 59, 59)
+    df_test= df.loc[(df.index> df.start)  & (df.index<= data_end), :]
+
+
+
+
 
