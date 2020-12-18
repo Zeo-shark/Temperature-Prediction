@@ -49,3 +49,5 @@ too big & :height=... not work
 ![sample_plot_1](./sample_outputs/sample_plot_1.png)  
 ![sample_plot_2](./sample_outputs/sample_plot_2.png)  
 --->
+
+This project is undertaken with complete reference to [jasonx1011/temperature-prediction]()

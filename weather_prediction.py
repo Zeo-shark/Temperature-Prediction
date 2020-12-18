@@ -581,6 +581,13 @@ def create_new_features(df):
 
     return df
 
+#End of Function Definition#
+
+st=['STATION']
+targets= ['HOURLYDRYBULBTEMPC']
+date= ['DATE']
+
+
 
 
 
