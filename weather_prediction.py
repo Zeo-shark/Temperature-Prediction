@@ -660,4 +660,17 @@ for experiment in [3]:
     # score: 0.86
     days_later = 1
 
+    # select month, select day
+    if (days_later == 365):
+        # fixed date
+        (s_month, s_day) = (1, 1)
+    elif (days_later == 30):
+        # s_month: 1 - 11
+        (s_month, s_day) = (3, 1)
+    elif (days_later == 1):
+        # (s_month, s_day) = (6, 1)
+        (s_month, s_day) = (1, 1)
+    else:
+        raise SystemExit("Please enter a valid days_later: 365/30/1.")
 
+    new_target = [str(days_later) + "days_later_temp_C"]
