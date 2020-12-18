@@ -170,7 +170,7 @@ def data_gen(df, targets, features, data_tr_yr_start, data_tr_yr_end, data_test_
     return (X_train, y_train, X_test, y_test)
 
 
-def normalisation(df_train, df_test, targets, features):
+def normalization(df_train, df_test, targets, features):
 
     #do interpolate on training data only
     df_train_local=  interpolate_df(df_train, features)

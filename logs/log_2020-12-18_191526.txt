@@ -1,0 +1,4 @@
+===================== 
+### Experiment = 3 
+new_target = ['1days_later_temp_C'] 
+new_features = ['HOURLYDRYBULBTEMPC', 'HOURLYDewPointTempC', 'HOURLYRelativeHumidity', 'HOURLYWindSpeed', 'HOURLYWindDirection', 'HOURLYStationPressure', 'cos_wind_dir', 'mins_year', 'mins_day', 'cos_mins_year', 'cos_mins_day'] 
