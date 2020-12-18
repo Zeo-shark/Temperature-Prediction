@@ -638,3 +638,4 @@ for experiment in [3]:
     else:
         raise sys.SystemExit("new_features is out of range!!!")
 
+    print("len(df.index) = {}".format(len(df.index)))
