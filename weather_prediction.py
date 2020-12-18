@@ -147,7 +147,56 @@ def data_gen(df, targets, features, data_tr_yr_start, data_tr_yr_end, data_test_
     data_end=   datetime(data_test_yr_end, 12, 31, 23, 59, 59)
     df_test= df.loc[(df.index> df.start)  & (df.index<= data_end), :]
 
+    # drop NaN number rows of test set
+    (row_old, col_old) = df_test.shape
+    print("Before drop NaN number of test set, df_test.shape = {}".format(df_test.shape))
+    df_test = df_test[df_test.notnull().all(axis=1)]
+    (row, col) = df_test.shape
+    print("After drop NaN number of test set, df_test.shape = {}".format(df_test.shape))
+    print("Drop rate = {0:.2f} ".format(float(1 - (row / row_old))))
+
+    df_test.to_csv('df_test_clean.csv')
+    X_test = df_test[features]
+    y_test = df_test[targets]
+
+    # normalization and scale for training/test set
+    # use robust_scaler to avoid misleading outliers
+    # scaler = preprocessing.StandardScaler()
+    # use robust_scaler to avoid misleading outliers
+    scaler = preprocessing.RobustScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    return (X_train, y_train, X_test, y_test)
 
 
+def normalisation(df_train, df_test, targets, features):
+
+    #do interpolate on training data only
+    df_train_local=  interpolate_df(df_train, features)
+
+    X_train= df_train_local[features]
+    y_train= df_train_local[targets]
+
+    X_test= df_test[features]
+    y_test= df_test[targets]
+
+    #normalization and scale for training/test set
+    # use robust_scaler to avoid misleading outliers
+    # scaler= preprocessing.StandardScaler()
+    # use robust_scaler to avoid misleading outliers
+    scaler= preprocessing.RobustScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test =  scaler.transform(X_test)
+
+    return (X_train, y_train, X_test, y_test)
+
+#plot y_test
+def plot_y_test(regr, X_test, y_test, ask_user):
+    (r_test, c_test)= X_test.shape
+
+    # for i in range(c_test):
+    #     plt.scatter(X_test[:, i], y_test)
+    #     plt.plot(X_test[:, i], regr.predict(X_test), color='blue', linewidth=3)
 
 
