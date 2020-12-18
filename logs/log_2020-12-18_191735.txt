@@ -1,0 +1,84 @@
+===================== 
+### Experiment = 3 
+new_target = ['1days_later_temp_C'] 
+new_features = ['HOURLYDRYBULBTEMPC', 'HOURLYDewPointTempC', 'HOURLYRelativeHumidity', 'HOURLYWindSpeed', 'HOURLYWindDirection', 'HOURLYStationPressure', 'cos_wind_dir', 'mins_year', 'mins_day', 'cos_mins_year', 'cos_mins_day'] 
+====================
+poly_degree = 1, interaction_only = False
+====================
+Features polynomial degree: 1 
+Model: linear_model.Ridge 
+Alpha (Regularization strength): 0.0001 
+X_train.shape = (100284, 12) 
+y_train.shape = (100284, 1) 
+X_test.shape = (8457, 12) 
+y_test.shape = (8457, 1) 
+For training set: 
+Mean squared error (train): 5.442 
+Variance score (train): 0.825 
+For test set: 
+Mean squared error (test): 5.340 
+Variance score (test): 0.814 
+model_runtime (training) = 0.062 (seconds) 
+model_runtime (predict train set) = 0.005 (seconds) 
+model_runtime (predict test set) = 0.002 (seconds) 
+====================
+====================
+poly_degree = 1, interaction_only = False
+====================
+Features polynomial degree: 1 
+Model: linear_model.Ridge 
+Alpha (Regularization strength): 0.001 
+X_train.shape = (100284, 12) 
+y_train.shape = (100284, 1) 
+X_test.shape = (8457, 12) 
+y_test.shape = (8457, 1) 
+For training set: 
+Mean squared error (train): 5.442 
+Variance score (train): 0.825 
+For test set: 
+Mean squared error (test): 5.340 
+Variance score (test): 0.814 
+model_runtime (training) = 0.038 (seconds) 
+model_runtime (predict train set) = 0.004 (seconds) 
+model_runtime (predict test set) = 0.001 (seconds) 
+====================
+====================
+poly_degree = 1, interaction_only = False
+====================
+Features polynomial degree: 1 
+Model: linear_model.Ridge 
+Alpha (Regularization strength): 0.01 
+X_train.shape = (100284, 12) 
+y_train.shape = (100284, 1) 
+X_test.shape = (8457, 12) 
+y_test.shape = (8457, 1) 
+For training set: 
+Mean squared error (train): 5.442 
+Variance score (train): 0.825 
+For test set: 
+Mean squared error (test): 5.340 
+Variance score (test): 0.814 
+model_runtime (training) = 0.026 (seconds) 
+model_runtime (predict train set) = 0.004 (seconds) 
+model_runtime (predict test set) = 0.001 (seconds) 
+====================
+====================
+poly_degree = 1, interaction_only = False
+====================
+Features polynomial degree: 1 
+Model: linear_model.Ridge 
+Alpha (Regularization strength): 0.1 
+X_train.shape = (100284, 12) 
+y_train.shape = (100284, 1) 
+X_test.shape = (8457, 12) 
+y_test.shape = (8457, 1) 
+For training set: 
+Mean squared error (train): 5.442 
+Variance score (train): 0.825 
+For test set: 
+Mean squared error (test): 5.340 
+Variance score (test): 0.814 
+model_runtime (training) = 0.027 (seconds) 
+model_runtime (predict train set) = 0.003 (seconds) 
+model_runtime (predict test set) = 0.001 (seconds) 
+====================
