@@ -674,3 +674,87 @@ for experiment in [3]:
         raise SystemExit("Please enter a valid days_later: 365/30/1.")
 
     new_target = [str(days_later) + "days_later_temp_C"]
+
+# http://stackoverflow.com/questions/25322933/pandas-timeseries-comparison
+    # new_features = targets + features_seasonal_test
+    # df1 = df[date + targets + features_seasonal_test]
+    # df2 = df[date + targets + features_seasonal_test]
+    # poly_degree = 3, interaction_only = False
+    # Mean squared error: 9.63
+    # Variance score: 0.66
+
+
+    df1 = df[date + new_features]
+    df2 = df[date + new_features]
+
+    df2.loc[:, "DATE"] = df1["DATE"].apply(lambda time_obj: time_obj + relativedelta(days=-days_later))
+    df2.rename(columns={str(targets[0]): str(new_target[0])}, inplace=True)
+
+    df1 = df1.set_index(["DATE"])
+    df2 = df2.set_index(["DATE"])
+    # df2 = df2.set_index([new_target])
+
+    t1, t2 = df1.align(df2)
+
+    t3 = t1
+    t3.loc[:, new_target] = t2[new_target]
+    # df_time_train = t3['2006':'2014']
+    range_start = datetime(train_yr_start, 1, 1, 0, 0, 0)
+    range_end   = datetime(train_yr_start, 1, 1, 0, 0, 0) + relativedelta(years=train_years)
+
+    df_time_train = t3[range_start.strftime('%Y-%m-%d %H:%M:%S') : range_end.strftime('%Y-%m-%d %H:%M:%S')]
+    print("df_time_train.shape = {}".format(df_time_train.shape))
+    df_time_train.loc[:, new_target] = df_time_train[new_target].interpolate(method='time')
+
+    # df_time_test = t3['2015']
+    range_start = datetime(test_yr_start, s_month, s_day, 0, 0, 0)
+    range_end   = datetime(test_yr_start, s_month, s_day, 0, 0, 0) + relativedelta(days=365)
+    # range_end   = datetime(2017, 3, 05, 0, 0, 0)
+    # range_end   = datetime(2017, 3, 05, 0, 0, 0)
+
+    df_time_test = t3[range_start.strftime('%Y-%m-%d %H:%M:%S') : range_end.strftime('%Y-%m-%d %H:%M:%S')]
+    print("df_time_test.shape = {}".format(df_time_train.shape))
+
+    # drop NaN number rows of test set
+    (row_old, col_old) = df_time_test.shape
+    print("Before drop NaN number of test set, df_time_test.shape = {}".format(df_time_test.shape))
+    df_time_test = df_time_test[ df_time_test.notnull().all(axis=1) ]
+    (row, col) = df_time_test.shape
+    print("After drop NaN number of test set, df_time_test.shape = {}".format(df_time_test.shape))
+    print("Drop rate = {0:.2f} ".format(float(1 - (row/row_old)) ) )
+
+    print("===================== \n")
+    print("### Experiment = {} \n".format( experiment ) )
+    print("new_target = {} \n".format( new_target ) )
+    print("new_features = {} \n".format( new_features ) )
+    with open("logs/log_" + log_timestr +".txt", "a") as logfile:
+        logfile.write("===================== \n")
+        logfile.write("### Experiment = {} \n".format( experiment ) )
+        logfile.write("new_target = {} \n".format( new_target ) )
+        logfile.write("new_features = {} \n".format( new_features ) )
+    # run_fit("_predict_", df_time_train, df_time_test, new_target, new_features, poly_d_max=3, inter_only=False, print_coef=False, plot=False, ask_user=False)
+    # run_fit("_predict_", df_time_train, df_time_test, new_target, new_features, poly_d_max=2, inter_only=False, print_coef=True, plot=False, ask_user=False)
+    # ask_user = False (using default)
+    # run_fit("_predict_", df_time_train, df_time_test, new_target, new_features, poly_d_max=1, inter_only=False, print_coef=True, plot=True, ask_user=False)
+    # model_re = run_fit("_predict_", df_time_train, df_time_test, new_target, new_features, poly_d_max=3, inter_only=False, print_coef=False, plot=False, ask_user=False)
+    # model_re = run_fit("_predict_", df_time_train, df_time_test, new_target, new_features, poly_d_max=2, inter_only=False, print_coef=False, plot=False, ask_user=False)
+    model_re = run_fit("_predict_", df_time_train, df_time_test, new_target, new_features, poly_d_max=2, inter_only=False, print_coef=False, plot=True, ask_user=False)
+    # ask_user = True (asking user for ploting time range)
+    # run_fit("_predict_", df_time_train, df_time_test, new_target, new_features, poly_d_max=2, inter_only=False, print_coef=True, plot=True, ask_user=True)
+    # debug
+    # run_fit("_predict_", df_time_train, df_time_test, new_target, new_features, poly_d_max=1, inter_only=False, print_coef=True, plot=False, ask_user=False)
+
+    print("### Experiment = {} \n".format( experiment ) )
+    # print("model_re = {}".format(model_re))
+
+    rt_stop = timeit.default_timer()
+    total_runtime = rt_stop - rt_start
+    print("runtime = {} (seconds) \n".format(total_runtime))
+    with open("logs/log_" + log_timestr +".txt", "a") as logfile:
+        logfile.write("total runtime = {} (seconds) \n".format(total_runtime))
+        logfile.write("### Experiment = {} \n".format( experiment ) )
+        for i in model_re.keys():
+            # logfile.write("=== model result === \n")
+            logfile.write("model_re[{}] = {}\n".format(i, model_re[i]))
+            # logfile.write("{} \n".format(model_re[i]))
+            # logfile.write("==================== \n")
