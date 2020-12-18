@@ -652,3 +652,12 @@ for experiment in [3]:
     # train_years = 10
     # test_years = 1
     test_yr_start = train_yr_start + train_years
+
+    # score: 0.68
+    # days_later = 365
+    # score: 0.69
+    # days_later = 30
+    # score: 0.86
+    days_later = 1
+
+
