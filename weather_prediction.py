@@ -517,6 +517,24 @@ def evaluation(X_train, y_train, X_test, y_test, poly_degree, interaction_only, 
         logfile.write("model_runtime (predict test set) = {0:.3f} (seconds) \n".format(model_runtime_predict_test))
         logfile.write("====================\n")
 
+        # collect info.
+        (s_n, f_n) = X_train.shape
+        model_result.update({(model_name, alpha, int(f_n), poly_degree): []})
+        ## model_result[(model_name, alpha, int(f_n) )] = ( poly_degree, round(mse_train, 3), round(score_train, 3),
+        ##             round(mse_test, 3), round(score_test, 3),
+        ##             round(model_runtime, 3), round(model_runtime_predict_train, 3), round(model_runtime_predict_test, 3) )
+        model_result[(model_name, alpha, int(f_n), poly_degree)] = (round(mse_train, 3), round(score_train, 3),
+                                                                    round(mse_test, 3), round(score_test, 3),
+                                                                    round(model_runtime, 3),
+                                                                    round(model_runtime_predict_train, 3),
+                                                                    round(model_runtime_predict_test, 3))
+
+        # print shape
+        if (plot == True):
+            plot_y_test(regr, X_test, y_test, ask_user)
+
+        return model_result
+
 
 
 
