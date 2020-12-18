@@ -34,4 +34,8 @@ log_timestr= datetime.now().strftime("%Y-%m-%d_%H%M%S")
 with open("logs/log_" + log_timestr+ ".txt","w") as logfile:
     logfile.close()
 
-
+#function definition
+def print_data_type(x):
+    for f in x.columns:
+        print("f = {}".format(f))
+        print(x[f].dtype)
