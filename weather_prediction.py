@@ -587,8 +587,18 @@ st=['STATION']
 targets= ['HOURLYDRYBULBTEMPC']
 date= ['DATE']
 
+s_features = ['HOURLYDewPointTempC', 'HOURLYRelativeHumidity', 'HOURLYWindSpeed', 'HOURLYWindDirection', 'HOURLYStationPressure']
 
+# df = pd.read_csv('weather_2_stations.csv', parse_dates=['DATE'])
+# df = pd.read_csv('weather_2_stations.csv', dtype=date_type, na_values=additional_na_v, parse_dates=['DATE'])
 
+test= ['cos_wind_dir']
+features_test_only = test
+# create seasonal related features
+features_seasonal_only = ['mins_year', 'mins_day', 'cos_mins_year', 'cos_mins_day']
+
+# features_seasonal_only = ['cos_mins_year', 'cos_mins_day', 'cos_wind_dir']
+features_seasonal_test = features_seasonal_only + test
 
 
 
