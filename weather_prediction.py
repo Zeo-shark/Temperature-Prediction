@@ -639,3 +639,8 @@ for experiment in [3]:
         raise sys.SystemExit("new_features is out of range!!!")
 
     print("len(df.index) = {}".format(len(df.index)))
+
+    # default training yr
+    # HOURLYStationPressure data start at 2005 for station, WBAN:23293
+    ## train_yr_start = 2005
+    ## station_1.csv 2007.01.01 - 2016.12.31
