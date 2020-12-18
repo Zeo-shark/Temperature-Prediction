@@ -317,5 +317,56 @@ def plot_y_test(regr, X_test, y_test, ask_user):
 
     plt.show()
 
+# poly-degree= int , interaction_only= True
+def linear_regr(X_train, y_train, X_test,y_test, poly_degree, interaction_only,print_coef, plot, ask_user, model_result):
+
+    #create more features
+    poly= preprocessing.PolynomialFeatures(poly_degree, interaction_only= interaction_only)
+
+    X_train = poly.fit_transform(X_train)
+    X_test = poly.fit_transform(X_test)
+    (s_n, f_n) = X_train.shape
+    # l_n = int(math.ceil(1.5*f_n))
+    l_n = int(math.ceil(1.2 * f_n))
+    print("@@@ s_n = {}, f_n = {}, l_n = {}".format(s_n, f_n, l_n))
+
+    np.savetxt("x_train.csv", X_train, delimiter=",")
+    np.savetxt("y_train.csv", y_train, delimiter=",")
+    np.savetxt("x_test.csv", X_test, delimiter=",")
+    np.savetxt("y_test.csv", y_test, delimiter=",")
+
+    print("### type of X_train = {}".format(type(X_train)) )
+
+    # debug
+    for model in [2]:
+    # linear regr: [0, 1, 2] NN: [3, 4]
+    # for model in [0 1 2 3]:
+    # run all: very long runtime
+    # for model in [0 1 2 3 4]:
+        # model selection
+        ## # test score: 0.83
+        ## model_name = "SGDRegressor"
+        ## model_rt_start = timeit.default_timer()
+        ## regr = linear_model.SGDRegressor(penalty='elasticnet', alpha=0.01, l1_ratio=0.25, fit_intercept=True)
+        ## model_rt_stop = timeit.default_timer()
+        ## model_runtime = model_rt_stop - model_rt_start
+        ## # test score: 0.83
+        ## model_name = "ElasticNet"
+        ## model_rt_start = timeit.default_timer()
+        ## regr = linear_model.ElasticNet(alpha = 0.01)
+        ## model_rt_stop = timeit.default_timer()
+        ## model_runtime = model_rt_stop - model_rt_start
+        if   (model == 0):
+            # test score: 0.84
+            alpha = 0
+            model_name = "linear_model.LinearRegression"
+            regr = linear_model.LinearRegression(copy_X=True, fit_intercept=True, n_jobs=1, normalize=False)
+            model_rt_start = timeit.default_timer()
+            regr.fit(X_train, column_or_1d(y_train) )
+            model_rt_stop = timeit.default_timer()
+            model_runtime = model_rt_stop - model_rt_start
+            model_result = evaluation(X_train, y_train, X_test, y_test, poly_degree, interaction_only, print_coef, plot, ask_user,
+                            model_result, model_name, model_runtime, regr, alpha)
+
 
 
