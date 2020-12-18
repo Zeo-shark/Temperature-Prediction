@@ -622,4 +622,19 @@ df = df.apply(pd.to_numeric, errors='coerce')
 df = df.assign( DATE = s2[date])
 df = create_new_features(df)
 
+# debug
+for experiment in [3]:
+# for experiment in [0]:
+# for experiment in [0,1,2,3]:
+
+    if   (experiment == 0):
+        new_features = targets
+    elif (experiment == 1):
+        new_features = targets + s_features + features_test_only
+    elif (experiment == 2):
+        new_features = targets + features_seasonal_only
+    elif (experiment == 3):
+        new_features = targets + s_features + features_test_only + features_seasonal_only
+    else:
+        raise sys.SystemExit("new_features is out of range!!!")
 
