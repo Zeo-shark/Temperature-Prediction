@@ -644,3 +644,11 @@ for experiment in [3]:
     # HOURLYStationPressure data start at 2005 for station, WBAN:23293
     ## train_yr_start = 2005
     ## station_1.csv 2007.01.01 - 2016.12.31
+
+    train_yr_start = 2007
+    train_years = 9
+    test_years = 1
+    # train_yr_start = 2006
+    # train_years = 10
+    # test_years = 1
+    test_yr_start = train_yr_start + train_years
