@@ -563,6 +563,24 @@ def run_fit(postfix, df_run_train, df_run_test, targets_run, features_run, poly_
     return model_re
 
 
+def create_new_features(df):
+    if ("DATE" in df.columns):
+        df["mins_year"] = df["DATE"].apply(lambda x: dateToMinute(x, 'year'))
+        df["mins_month"] = df["DATE"].apply(lambda x: dateToMinute(x, 'month'))
+        df["mins_day"] = df["DATE"].apply(lambda x: dateToMinute(x, 'day'))
+        df["mins_hour"] = df["DATE"].apply(lambda x: dateToMinute(x, 'hour'))
+
+        # cos function for seasonal features
+        df["cos_mins_year"] = df["mins_year"].apply(lambda x: math.cos(math.radians((x / (366 * 24 * 60)) * 360)))
+        df["cos_mins_month"] = df["mins_month"].apply(lambda x: math.cos(math.radians((x / (31 * 24 * 60)) * 360)))
+        df["cos_mins_day"] = df["mins_day"].apply(lambda x: math.cos(math.radians((x / (1 * 24 * 60)) * 360)))
+
+    if ("HOURLYWindDirection" in df.columns):
+        # wind direction normalization
+        df["cos_wind_dir"] = df["HOURLYWindDirection"].apply(lambda x: math.cos(math.radians(x)))
+
+    return df
+
 
 
 
