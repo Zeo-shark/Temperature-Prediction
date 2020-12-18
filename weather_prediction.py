@@ -517,23 +517,51 @@ def evaluation(X_train, y_train, X_test, y_test, poly_degree, interaction_only, 
         logfile.write("model_runtime (predict test set) = {0:.3f} (seconds) \n".format(model_runtime_predict_test))
         logfile.write("====================\n")
 
-        # collect info.
-        (s_n, f_n) = X_train.shape
-        model_result.update({(model_name, alpha, int(f_n), poly_degree): []})
-        ## model_result[(model_name, alpha, int(f_n) )] = ( poly_degree, round(mse_train, 3), round(score_train, 3),
-        ##             round(mse_test, 3), round(score_test, 3),
-        ##             round(model_runtime, 3), round(model_runtime_predict_train, 3), round(model_runtime_predict_test, 3) )
-        model_result[(model_name, alpha, int(f_n), poly_degree)] = (round(mse_train, 3), round(score_train, 3),
-                                                                    round(mse_test, 3), round(score_test, 3),
-                                                                    round(model_runtime, 3),
-                                                                    round(model_runtime_predict_train, 3),
-                                                                    round(model_runtime_predict_test, 3))
+    # collect info.
+    (s_n, f_n) = X_train.shape
+    model_result.update({(model_name, alpha, int(f_n), poly_degree): []})
+    ## model_result[(model_name, alpha, int(f_n) )] = ( poly_degree, round(mse_train, 3), round(score_train, 3),
+    ##             round(mse_test, 3), round(score_test, 3),
+    ##             round(model_runtime, 3), round(model_runtime_predict_train, 3), round(model_runtime_predict_test, 3) )
+    model_result[(model_name, alpha, int(f_n), poly_degree)] = (round(mse_train, 3), round(score_train, 3),
+                                                                round(mse_test, 3), round(score_test, 3),
+                                                                round(model_runtime, 3),
+                                                                round(model_runtime_predict_train, 3),
+                                                                round(model_runtime_predict_test, 3))
 
-        # print shape
-        if (plot == True):
-            plot_y_test(regr, X_test, y_test, ask_user)
+    # print shape
+    if (plot == True):
+        plot_y_test(regr, X_test, y_test, ask_user)
 
-        return model_result
+    return model_result
+
+
+# def run_fit(postfix, df_run, targets_run, features_run, poly_d_max, inter_only, print_coef, plot):
+def run_fit(postfix, df_run_train, df_run_test, targets_run, features_run, poly_d_max, inter_only, print_coef, plot,
+            ask_user):
+    text = "RUNNING... df" + postfix
+    print("{0:{fill}{align}16}".format(text, fill='=', align='^'))
+    (X_train, y_train, X_test, y_test) = (0, 0, 0, 0)
+    # (X_train, y_train, X_test, y_test) = data_gen(df_run, targets_run, features_run, 2006, 2015, 2016, 2016)
+    (X_train, y_train, X_test, y_test) = normalization(df_run_train, df_run_test, targets_run, features_run)
+    # data = []
+    # (data[0], data[1], data[2], data[3]) = data_gen(df_run, features_run)
+    print("df{} X_train.shape = {}".format(postfix, X_train.shape))
+    print("df{} y_train.shape = {}".format(postfix, y_train.shape))
+    print("df{} X_test.shape = {}".format(postfix, X_test.shape))
+    print("df{} y_test.shape = {}".format(postfix, y_test.shape))
+    print("df_run_train target + features = {}".format(df_run_train.columns.values))
+    print("=====")
+
+    model_re = {}
+
+    # for poly_d in range(1, poly_d_max+1):
+    for poly_d in range(1, poly_d_max + 1):
+        model_re = linear_regr(X_train, y_train, X_test, y_test, poly_degree=poly_d,
+                               interaction_only=inter_only, print_coef=print_coef, plot=plot, ask_user=ask_user,
+                               model_result=model_re)
+    return model_re
+
 
 
 
