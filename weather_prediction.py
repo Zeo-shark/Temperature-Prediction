@@ -221,4 +221,9 @@ def plot_y_test(regr, X_test, y_test, ask_user):
     # print(df_plot)
     # print("#########################")
 
+    # default plot time range
+    plot_yr = 2016
+    plot_month = 10
+    plot_day = 5
+    duration = 10
 
