@@ -454,6 +454,69 @@ def evaluation(X_train, y_train, X_test, y_test, poly_degree, interaction_only, 
     print("X_test.shape = {}".format(X_test.shape))
     print("y_test.shape = {}".format(y_test.shape))
 
+    if (print_coef):
+        # The coefficients
+        if hasattr(regr, 'coef_'):
+            print("Coefficients: {}\n", regr.coef_)
+            with open("logs/log_" + log_timestr + ".txt", "a") as logfile:
+                logfile.write("Coefficients: {}\n".format(regr.coef_))
+        # for neural_network.MLPRegressor
+        if hasattr(regr, 'coefs_'):
+            print("Coefficients: {}\n", regr.coefs_)
+            with open("logs/log_" + log_timestr + ".txt", "a") as logfile:
+                logfile.write("Coefficients: {}\n".format(regr.coefs_))
+
+    print("For training set:")
+    (mse_train, score_train) = (0, 0)
+    # mse_train = float(np.mean( (regr.predict(X_train) - y_train) ** 2) )
+    # need to use column_or_1d instead of np.array
+    model_rt_predict_train_start = timeit.default_timer()
+    predict_train = regr.predict(X_train)
+    model_rt_predict_train_stop = timeit.default_timer()
+    model_runtime_predict_train = model_rt_predict_train_stop - model_rt_predict_train_start
+    mse_train = float(np.mean((predict_train - column_or_1d(y_train)) ** 2))
+    score_train = regr.score(X_train, y_train)
+    # The mean squared error
+    print("Mean squared error (train): {0:.3f} \n".format(mse_train))
+    # Explained variance score: 1 is perfect prediction
+    print("Variance score (train): {0:.3f} \n".format(score_train))
+    print("model_runtime (training) = {0:.3f} (seconds) \n".format(model_runtime))
+    print("model_runtime (predict train set) = {0:.3f} (seconds) \n".format(model_runtime_predict_train))
+
+    print("For test set:")
+    (mse_test, score_test) = (0, 0)
+    model_rt_predict_test_start = timeit.default_timer()
+    predict_test = regr.predict(X_test)
+    model_rt_predict_test_stop = timeit.default_timer()
+    model_runtime_predict_test = model_rt_predict_test_stop - model_rt_predict_test_start
+    mse_test = float(np.mean((predict_test - column_or_1d(y_test)) ** 2))
+    score_test = regr.score(X_test, y_test)
+    # The mean squared error
+    print("Mean squared error (test): {0:.3f} \n".format(mse_test))
+    # Explained variance score: 1 is perfect prediction
+    print("Variance score (test): {0:.3f} \n".format(score_test))
+    print("model_runtime (predict test set) = {0:.3f} (seconds) \n".format(model_runtime_predict_test))
+
+    with open("logs/log_" + log_timestr + ".txt", "a") as logfile:
+        logfile.write("====================\n")
+        logfile.write("Features polynomial degree: {} \n".format(poly_degree))
+        logfile.write("Model: {} \n".format(model_name))
+        logfile.write("Alpha (Regularization strength): {} \n".format(alpha))
+        logfile.write("X_train.shape = {} \n".format(X_train.shape))
+        logfile.write("y_train.shape = {} \n".format(y_train.shape))
+        logfile.write("X_test.shape = {} \n".format(X_test.shape))
+        logfile.write("y_test.shape = {} \n".format(y_test.shape))
+        logfile.write("For training set: \n")
+        logfile.write("Mean squared error (train): {0:.3f} \n".format(mse_train))
+        logfile.write("Variance score (train): {0:.3f} \n".format(score_train))
+        logfile.write("For test set: \n")
+        logfile.write("Mean squared error (test): {0:.3f} \n".format(mse_test))
+        logfile.write("Variance score (test): {0:.3f} \n".format(score_test))
+        logfile.write("model_runtime (training) = {0:.3f} (seconds) \n".format(model_runtime))
+        logfile.write("model_runtime (predict train set) = {0:.3f} (seconds) \n".format(model_runtime_predict_train))
+        logfile.write("model_runtime (predict test set) = {0:.3f} (seconds) \n".format(model_runtime_predict_test))
+        logfile.write("====================\n")
+
 
 
 
