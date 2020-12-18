@@ -226,4 +226,18 @@ def plot_y_test(regr, X_test, y_test, ask_user):
     plot_month = 10
     plot_day = 5
     duration = 10
+    range_start = datetime(plot_yr, plot_month, plot_day, 0, 0, 0)
+    range_end = datetime(plot_yr, plot_month, plot_day, 0, 0, 0) + relativedelta(days=duration)
+
+    if (range_start < datetime(2016, 1, 2, 0, 0, 0) or range_end > datetime(2017, 1, 1, 0, 0, 0)):
+        raise SystemExit("Input date is out of range! Please try again!")
+    else:
+        print("Correct format and time range!")
+
+    if (ask_user == True):
+        print("Ready to plot! \n")
+        print("Time range: 2016/1/2 - 2016/12/31 (duration included) \n")
+        print("Please enter the following format (split by comma): \n")
+        print("years, month, day, ploting duration(days) \n")
+        print("For example, enter: {}, {}, {}, {}".format(plot_yr, plot_month, plot_day, duration))
 
