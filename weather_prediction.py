@@ -80,4 +80,47 @@ def dateToMinute(s, option):
 
     return int(time_diff.total_seconds()/60)
 
-#
+# do interpolate
+def interpoate_df(df, features):
+    df_re= df
+
+    print("len(df.index) = {}".format(len(df.index)))
+
+    # check all the data are float data and change data type to float64
+    for col in features:
+        # df[col]= df[col].astype(float)
+        temp= df[df[col].isnull()]
+        #print (test.head)
+        print("===")
+        #print(test.head(n=1))
+        print("{} type is {}".format(col, df[col].dtype))
+        print("{} type contain {} np.NaN".format(col, len(temp.index)))
+        print("===")
+
+    df_nan= df[df.isnull().any(axis=1)]
+    print("len(df_nan.index) = {}".format(len(df_nan.index)))
+    # df_nan.to_csv("df_nan.csv")
+
+    df_nan.head(n=1)
+
+    print("len(df.index) = {}".format(len(df.index)))
+    # it could be use time as index and set method = 'time'
+    # df.to_csv("df_before_interpolate.csv")
+    # df[features] = df[features].interpolate(method='time')
+    # df.loc[:, features] = df[features].interpolate(method='time')
+    # somehow, df(input) will get updated even use inplace=False
+    df_re.loc[:, features] = df[features].interpolate(method='time', inplace=False)
+    # df.to_csv("df_after_interpolate.csv")
+    # print("df = ")
+    # print(df)
+
+    #grab original nan values
+    df_nan_interpolate= df.loc[ df_nan.index.values ]
+    print("len(df_nan_interpolate.index) = {}".format(len(df_nan_interpolate.index)))
+    df_nan_interpolate.to_csv("df_nan_interpolate.csv")
+
+    if(df_re.notnull().all(axis=1).all(axis=0)):
+        print("CHECK: There is no null value in df_re.")
+
+    return df_re
+
