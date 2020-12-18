@@ -367,6 +367,94 @@ def linear_regr(X_train, y_train, X_test,y_test, poly_degree, interaction_only,p
             model_runtime = model_rt_stop - model_rt_start
             model_result = evaluation(X_train, y_train, X_test, y_test, poly_degree, interaction_only, print_coef, plot, ask_user,
                             model_result, model_name, model_runtime, regr, alpha)
+        elif (model == 1):
+            for alpha in [0.0001, 0.001, 0.01, 0.1, 1, 3, 10]:
+                # test score: 0.83
+                model_name = "linear_model.Lasso"
+                regr_lasso = linear_model.Lasso(alpha = alpha)
+                model_rt_start = timeit.default_timer()
+                regr_lasso.fit(X_train, column_or_1d(y_train) )
+                model_rt_stop = timeit.default_timer()
+                model_runtime = model_rt_stop - model_rt_start
+                model_result = evaluation(X_train, y_train, X_test, y_test, poly_degree, interaction_only, print_coef, plot, ask_user,
+                                model_result, model_name, model_runtime, regr_lasso, alpha)
+        elif ( model == 2 ):
+            for alpha in [0.0001, 0.001, 0.01, 0.1, 1, 3, 10]:
+                # for alpha in [0.0000001, 0.00001, 0.001, 0.01, 0.1, 1, 3, 10, 30, 100, 300, 10**3, 10**4, 10**5]:
+                # test score: 0.84
+                model_name = "linear_model.Ridge"
+                regr_ridge = linear_model.Ridge(alpha=alpha)
+                model_rt_start = timeit.default_timer()
+                regr_ridge.fit(X_train, column_or_1d(y_train))
+                model_rt_stop = timeit.default_timer()
+                model_runtime = model_rt_stop - model_rt_start
+                model_result = evaluation(X_train, y_train, X_test, y_test, poly_degree, interaction_only, print_coef, plot,
+                                          ask_user,
+                                          model_result, model_name, model_runtime, regr_ridge, alpha)
+        elif (model == 3):
+            if (poly_degree <= 2):
+                for alpha in [0.0001, 0.01, 1]:
+                # for alpha in [0.00001]:
+                    for layer_n in [3, 7, 11]:
+                    # for layer_n in [3]:
+                        # test score: 0.83, runtime longer
+                        model_name = "neural_network.MLPRegressor, layer = " + str(layer_n)
+                        if(layer_n == 3):
+                            regr = neural_network.MLPRegressor(random_state=True,hidden_layer_sizes=(l_n,l_n,l_n),alpha=alpha)
+                        if(layer_n == 7):
+                            regr = neural_network.MLPRegressor(random_state=True,hidden_layer_sizes=(l_n,l_n,l_n,l_n,l_n,l_n,l_n),alpha=alpha)
+                        if(layer_n == 11):
+                            regr = neural_network.MLPRegressor(random_state=True,hidden_layer_sizes=(l_n,l_n,l_n,l_n,l_n,l_n,l_n,l_n,l_n,l_n,l_n),alpha=alpha)
+                        model_rt_start = timeit.default_timer()
+                        regr.fit(X_train, column_or_1d(y_train) )
+                        model_rt_stop = timeit.default_timer()
+                        model_runtime = model_rt_stop - model_rt_start
+                        model_result = evaluation(X_train, y_train, X_test, y_test, poly_degree, interaction_only, print_coef, plot, ask_user,
+                                        model_result, model_name, model_runtime, regr, alpha)
+        elif (model == 4):
+            if (poly_degree <= 3):
+                for alpha in [1, 10, 1000]:
+                # for alpha in [0.00001]:
+                    # for layer_n in [3, 7, 11]:
+                    for layer_n in [7, 11]:
+                    # for layer_n in [3]:
+                        # test score: 0.83, runtime longer
+                        model_name = "neural_network.MLPRegressor, layer = " + str(layer_n)
+                        if(layer_n == 3):
+                            regr = neural_network.MLPRegressor(random_state=True,hidden_layer_sizes=(l_n,l_n,l_n),alpha=alpha)
+                        if(layer_n == 7):
+                            # regr = neural_network.MLPRegressor(random_state=True,hidden_layer_sizes=(l_n,l_n,l_n,l_n,l_n,l_n,l_n),alpha=alpha)
+                            regr = neural_network.MLPRegressor(random_state=True,hidden_layer_sizes=(l_n,l_n,l_n,l_n,l_n,l_n,l_n),alpha=alpha, learning_rate='invscaling')
+                        if(layer_n == 11):
+                            regr = neural_network.MLPRegressor(random_state=True,hidden_layer_sizes=(l_n,l_n,l_n,l_n,l_n,l_n,l_n,l_n,l_n,l_n,l_n),alpha=alpha)
+                        model_rt_start = timeit.default_timer()
+                        regr.fit(X_train, column_or_1d(y_train) )
+                        model_rt_stop = timeit.default_timer()
+                        model_runtime = model_rt_stop - model_rt_start
+                        model_result = evaluation(X_train, y_train, X_test, y_test, poly_degree, interaction_only, print_coef, plot, ask_user,
+                                        model_result, model_name, model_runtime, regr, alpha)
+
+        else:
+            raise SystemExit("Model selection out of range!!!")
+
+    return model_result
+
+
+def evaluation(X_train, y_train, X_test, y_test, poly_degree, interaction_only, print_coef, plot, ask_user,
+               model_result, model_name, model_runtime, regr, alpha):
+    print("poly_degree = {}, interaction_only = {}".format(poly_degree, interaction_only))
+    with open("logs/log_" + log_timestr + ".txt", "a") as logfile:
+        logfile.write("====================\n")
+        logfile.write("poly_degree = {}, interaction_only = {}\n".format(poly_degree, interaction_only))
+
+    print("Model: {} \n".format(model_name))
+    print("Alpha (Regularization strength): {} \n".format(alpha))
+    print("X_train.shape = {}".format(X_train.shape))
+    print("y_train.shape = {}".format(y_train.shape))
+    print("X_test.shape = {}".format(X_test.shape))
+    print("y_test.shape = {}".format(y_test.shape))
+
+
 
 
 
