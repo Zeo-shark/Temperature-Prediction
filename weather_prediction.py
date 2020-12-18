@@ -303,6 +303,19 @@ def plot_y_test(regr, X_test, y_test, ask_user):
 
     plt.show()
 
+    plt.figure()
+    # plt.subplot(122)
+    plt.xlabel("raw data (degree C)")
+    plt.ylabel("predict data (degree C)")
+    plt.title("perfect match (red) v.s. model (blue)")
+    plt.grid()
+    plt.plot(value_raw, value_raw, linestyle='--', marker='o', markersize=5, color='r', linewidth=1,
+             label="perfect match line")
+    plt.scatter(value_raw, value_predict, marker='o', s=10, color='b', label="predict temp C")
+    # plt.plot(value_predict, marker='o', markersize=3, color='b', label="predict temp C")
+    plt.legend(loc="best")
+
+    plt.show()
 
 
 
