@@ -616,5 +616,10 @@ s2 = df[ df.STATION == 'WBAN:23293' ]
 # station = pd.read_csv('s1.csv', parse_dates=['DATE'])
 # station = pd.read_csv('s2.csv', parse_dates=['DATE'])
 
+del df
+df = s2[targets + s_features]
+df = df.apply(pd.to_numeric, errors='coerce')
+df = df.assign( DATE = s2[date])
+df = create_new_features(df)
 
 
