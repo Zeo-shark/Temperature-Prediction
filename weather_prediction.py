@@ -600,5 +600,21 @@ features_seasonal_only = ['mins_year', 'mins_day', 'cos_mins_year', 'cos_mins_da
 # features_seasonal_only = ['cos_mins_year', 'cos_mins_day', 'cos_wind_dir']
 features_seasonal_test = features_seasonal_only + test
 
+features_no_time_no_test = [x for x in s_features if x not in test]
+features_no_test = [x for x in (s_features+features_seasonal_only) if x not in test]
+features_no_time = [x for x in s_features if x not in features_seasonal_only]
+
+fields = st + targets + date + s_features
+## df = pd.read_csv('weather_2_stations.csv', usecols=fields, parse_dates=date)
+df = pd.read_csv('station_1.csv', usecols=fields, parse_dates=date)
+s1 = df[ df.STATION == 'WBAN:23244' ]
+s2 = df[ df.STATION == 'WBAN:23293' ]
+
+# s1.to_csv('s1.csv')
+# s2.to_csv('s2.csv')
+
+# station = pd.read_csv('s1.csv', parse_dates=['DATE'])
+# station = pd.read_csv('s2.csv', parse_dates=['DATE'])
+
 
 
