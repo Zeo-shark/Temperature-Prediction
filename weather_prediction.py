@@ -241,3 +241,68 @@ def plot_y_test(regr, X_test, y_test, ask_user):
         print("years, month, day, ploting duration(days) \n")
         print("For example, enter: {}, {}, {}, {}".format(plot_yr, plot_month, plot_day, duration))
 
+        input_format_ok = False
+        while (input_format_ok == False):
+            user_input = input()
+            print("Your input is {}".format(user_input))
+            try:
+                plot_yr = int(user_input[0])
+                plot_month = int(user_input[1])
+                plot_day = int(user_input[2])
+                duration = int(user_input[3])
+
+                range_start = datetime(plot_yr, plot_month, plot_day, 0, 0, 0)
+                range_end = datetime(plot_yr, plot_month, plot_day, 0, 0, 0) + relativedelta(days=duration)
+
+                if (range_start < datetime(2016, 1, 2, 0, 0, 0) or range_end > datetime(2017, 1, 1, 0, 0, 0)):
+                    print("Input date is out of range! Please try again!")
+                else:
+                    print("Correct format and time range!")
+                    input_format_ok = True
+            except:
+                print("Incorrect format, please try again!")
+
+    df_plot = df_plot[range_start.strftime('%Y-%m-%d %H:%M:%S'): range_end.strftime('%Y-%m-%d %H:%M:%S')]
+    # write to csv file
+    df_plot_csv_file_name = "df_plot.csv"
+    df_plot.to_csv(df_plot_csv_file_name)
+    print("Prediction start from {} \n".format(range_start))
+    print("Prediction end at {} \n".format(range_end))
+    print("Detail in {}: \n".format(df_plot_csv_file_name))
+    # print(df_plot)
+    # dates = [datetime.fromtimestamp(ts) for ts in df_plot.index ]
+    datenums = [mPlotDATEs.date2num(ts) for ts in df_plot.index]
+    # print(datenums)
+    # print(mPlotDATEs.num2date(datenums) )
+    # datenums = mPlotDATEs.date2num(dates)
+    value_raw = np.array(df_plot['raw_temp_C'])
+    value_predict = np.array(df_plot['predict_temp_C'])
+
+    plt.figure()
+    plt.subplots_adjust(bottom=0.2)
+    # plt.xticks( rotation=25 )
+    plt.xticks(rotation=60)
+    ax = plt.gca()
+    xfmt = mPlotDATEs.DateFormatter('%Y-%m-%d %H:%M:%S')
+    ax.xaxis.set_major_formatter(xfmt)
+    ax.xaxis_date()
+    # plt.scatter(y_test.index, y_test)
+    # plt.plot(y_test.index, y_predict, color='blue', linewidth=3)
+    # plt.scatter(y_test.index[0:25], y_test[0:25])
+    # plt.plot(y_test.index[0:25], y_test[0:25], color='red', linewidth=3)
+    # plt.plot(y_test.index[0:25], y_predict[0:25], color='blue', linewidth=3)
+    # plt.subplot(121)
+    plt.xlabel("time range")
+    plt.ylabel("degree C")
+    plt.title("raw data (red) v.s. predict data (blue)")
+    plt.grid()
+    plt.plot(datenums, value_raw, linestyle='-', marker='o', markersize=5, color='r', linewidth=2, label="raw temp C")
+    plt.plot(datenums, value_predict, linestyle='-', marker='o', markersize=5, color='b', linewidth=2,
+             label="predict temp C")
+    plt.legend(loc="best")
+
+    plt.show()
+
+
+
+
